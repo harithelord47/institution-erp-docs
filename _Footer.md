@@ -1,1 +1,0 @@
-Developed by [@Duo Dev Technologies](https://duodev.in)

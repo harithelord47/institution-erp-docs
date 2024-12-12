@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Website</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        nav {
+            background: #34495e;
+            color: white;
+            padding: 1rem;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav ul li {
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 180px);
+        }
+
+        .sidebar {
+            width: 20%;
+            background: #ecf0f1;
+            padding: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar ul li a {
+            color: #34495e;
+            text-decoration: none;
+        }
+
+        .sidebar ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Documentation Website</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+        </aside>
+        <main class="content">
+            <h2>Welcome to the Documentation</h2>
+            <p>
+                This is the main content area where all the documentation details will appear.
+                You can structure your content into various sections and provide users with a comprehensive guide.
+            </p>
+            <h3 id="introduction">Introduction</h3>
+            <p>Start with an overview of the system, its purpose, and features.</p>
+            <h3 id="getting-started">Getting Started</h3>
+            <p>Guide users on how to begin using the system, including setup instructions.</p>
+            <h3 id="modules">Modules</h3>
+            <p>Describe different modules of the system and their functionalities.</p>
+            <h3 id="faq">FAQ</h3>
+            <p>Address frequently asked questions to help users troubleshoot issues.</p>
+            <h3 id="support">Support</h3>
+            <p>Provide contact information and details for additional help and support.</p>
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2024 Duo Dev Technologies. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
