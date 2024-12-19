@@ -1,146 +1,1001 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation Website</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ERP Management Documentation</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        <style>
+            /* General Body Styling */
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f7f9fc;
+                padding-top: 60px;
+                margin-left: 0;
+                transition: all 0.3s;
+            }
 
-        header {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            text-align: center;
-        }
+            /* Sidebar Styles */
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 250px;
+                height: 100%; /* Adjusted height to account for footer space */
+                background-color: #34495e;
+                color: white;
+                overflow-y: auto; /* Enable vertical scrolling */
+                transition: 0.3s;
+                padding-top: 20px;
+                box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1; /* Ensure sidebar is behind the footer */
+            }
 
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
 
-        nav {
-            background: #34495e;
-            color: white;
-            padding: 1rem;
-        }
+            #sidebar a {
+                padding: 15px 25px;
+                text-decoration: none;
+                font-size: 16px;
+                color: white;
+                display: block;
+                border-bottom: 1px solid #2c3e50;
+                transition: 0.3s;
+            }
 
-        nav ul {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: space-around;
-        }
+            #sidebar a:hover {
+                background-color: #1abc9c;
+                color: white;
+            }
 
-        nav ul li {
-            margin: 0;
-        }
+            #sidebar .submenu, #sidebar .nested-submenu {
+                background-color: transparent;
+                padding-left: 15px;
+            }
 
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+            #sidebar .submenu a, #sidebar .nested-submenu a {
+                font-size: 14px;
+                border-bottom: none;
+            }
 
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
+            #sidebar .submenu a:hover, #sidebar .nested-submenu a:hover {
+                background-color: #16a085;
+            }
 
-        .container {
-            display: flex;
-            min-height: calc(100vh - 180px);
-        }
+            /* Toggle Icon */
+            .toggle-icon {
+                float: right;
+                font-size: 12px;
+                transition: transform 0.3s;
+            }
 
-        .sidebar {
-            width: 20%;
-            background: #ecf0f1;
-            padding: 1rem;
-        }
+            .collapsed .toggle-icon {
+                transform: rotate(-90deg); /* Default down */
+            }
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
+            #modulesMenu.show + a .toggle-icon,
+            .nested-menu.show + a .toggle-icon {
+                transform: rotate(180deg); /* Up when expanded */
+            }
 
-        .sidebar ul li {
-            margin: 0.5rem 0;
-        }
+            /* Navbar Styling */
+            .navbar-content {
+                display: none;
+            }
 
-        .sidebar ul li a {
-            color: #34495e;
-            text-decoration: none;
-        }
+            .navbar-dark .dropdown-menu {
+                background-color: #343a40; /* Same as navbar bg-dark */
+                border: none; /* Remove borders */
+                box-shadow: none; /* Remove shadow */
+            }
 
-        .sidebar ul li a:hover {
-            text-decoration: underline;
-        }
+            .navbar-dark .dropdown-menu .dropdown-item {
+                color: #fff; /* White text */
+            }
+            
+            .navbar-dark .dropdown-menu .dropdown-item:hover {
+                background-color: #495057; /* Slightly lighter background for hover */
+            }
 
-        .content {
-            flex: 1;
-            padding: 2rem;
-        }
+            .dropdown-submenu {
+                position: relative;
+            }
 
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
+            .dropdown-submenu .dropdown-menu {
+                display: none; /* Hidden by default */
+                position: absolute;
+                left: 100%;
+                top: 0;
+                margin-left: 0;
+            }
 
-        footer p {
-            margin: 0;
-        }
-    </style>
-</head>
+            .dropdown-submenu.show .dropdown-menu {
+                display: block; /* Display when parent has 'show' class */
+                position: relative;
+                left: 20px;
+                top: 0;
+            }
 
-<body>
-    <header>
-        <h1>Documentation Website</h1>
-    </header>
-    <nav>
+
+            /* Content Area */
+            #content {
+                margin-top: -60px;
+                margin-left: 250px;
+                padding: 30px;
+                transition: margin-left 0.3s ease;
+            }
+
+            /* Section Styling */
+            section {
+                margin-bottom: 40px;
+            }
+
+            h2 {
+                color: #34495e;
+                font-size: 32px;
+                border-bottom: 2px solid #1abc9c;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+
+            /* Feature Cards Layout */
+            .feature-cards {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 30px;
+                justify-content: space-between;
+            }
+
+            /* Card Styling */
+            .feature-card {
+                background: linear-gradient(135deg, #6c5ce7, #00cec9);
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                width: 30%;
+                padding: 25px;
+                transition: all 0.4s ease;
+                text-align: center;
+                cursor: pointer;
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                height: 350px;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .feature-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 0;
+                background-color: rgba(0, 0, 0, 0.3);
+                transition: height 0.4s ease;
+                z-index: 1;
+            }
+
+            .feature-card:hover::before {
+                height: 100%;
+            }
+
+            .feature-card i {
+                font-size: 50px;
+                margin-bottom: 20px;
+                color: white;
+                z-index: 2;
+            }
+
+            .feature-card h4 {
+                color: white;
+                font-size: 22px;
+                font-weight: bold;
+                margin-bottom: 20px;
+                z-index: 2;
+            }
+
+            .feature-card ul {
+                padding-left: 20px;
+                font-size: 16px;
+                color: white;
+                text-align: left;
+                flex-grow: 1;
+                z-index: 2;
+            }
+
+            /* FAQ Section */
+            .container-acc {
+                margin: 0;
+            }
+            .container-acc h2 {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            
+            .container-acc p {
+                font-size: 16px;
+            }
+            
+            /* Accordion Buttons */
+            .container-acc .accordion-button {
+                background-color: #f8f9fa;
+                color: #333;
+                font-size: 16px;
+                font-weight: bold;
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                position: relative;
+            }
+
+            .container-acc .accordion-button:focus {
+                box-shadow: none;
+            }
+            
+            .container-acc .accordion-button:not(.collapsed) {
+                background-color: #333;
+                color: white;
+            }
+            
+            .container-acc .accordion-button .arrow {
+                font-size: 18px;
+                transition: transform 0.3s ease;
+            }
+            
+            .container-acc .accordion-button.collapsed .arrow {
+                transform: rotate(0deg);
+            }
+            
+            .container-acc .accordion-button:not(.collapsed) .arrow {
+                transform: rotate(180deg);
+            }
+            
+            /* Accordion Body */
+            .container-acc .accordion-body {
+                background-color: #f1f1f1;
+                padding: 20px;
+                font-size: 15px;
+                margin-bottom: 0.5rem;
+            }
+
+            /* Contact Section */
+            .contact-left {
+                padding: 20px;
+            }
+
+            .contact-left h2 {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #1abc9c;
+                padding-bottom: 10px;
+            }
+
+            .contact-detail {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 15px;
+            }
+
+            .contact-detail i {
+                font-size: 20px;
+                color: #1abc9c;
+                margin-right: 10px;
+            }
+
+            .contact-detail p {
+                margin: 0;
+                font-size: 16px;
+                color: #555;
+            }
+
+            .contact-right {
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px;
+            }
+
+            .contact-right h3 {
+                font-size: 24px;
+                color: #333;
+                text-align: left;
+                border-bottom: 2px solid #1abc9c;
+                padding-bottom: 10px;
+            }
+
+            .form-label {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .form-control {
+                border-radius: 5px;
+                border: 1px solid #ddd;
+            }
+
+            .btn-submit {
+                background-color: #1abc9c;
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                border: none;
+                border-radius: 5px;
+                padding: 10px;
+                width: 100%;
+                transition: background-color 0.3s;
+            }
+
+            .btn-submit:hover {
+                background-color: #16a085;
+            }
+
+            .map-container iframe {
+                width: 100%;
+                height: 200px;
+                border: none;
+                border-radius: 8px;
+            }
+
+            /* Media query Sidebar and Navbar */
+            @media (max-width: 786px) {
+                #sidebar {
+                    display: none;
+                }
+                
+                .navbar-content {
+                    display: block;
+                    margin-top: -60px;
+                }
+            }
+
+            /* Media query Content Area */
+            @media (max-width: 786px) {
+                #content {
+                    margin-left: 0px;
+                    padding: 15px;
+                }
+            }
+
+            /* Media query Overview Section */
+            @media (max-width: 786px) {
+                #overview h2 {
+                    font-size: 24px;
+                }
+
+                #overview p {
+                    font-size: 14px;
+                    line-height: 1.5;
+                }
+            }
+
+            /* Media query Features Section */
+            @media (max-width: 786px) {
+                #modules h2 {
+                    font-size: 24px;
+                }
+
+                .feature-cards {
+                    flex-direction: column;
+                    gap: 15px;
+                }
+
+                .feature-card {
+                    width: 100%;
+                    height: auto;
+                    padding: 15px;
+                }
+
+                .feature-card i {
+                    font-size: 40px;
+                }
+
+                .feature-card h4 {
+                    font-size: 18px;
+                }
+
+                .feature-card ul {
+                    font-size: 14px;
+                }
+            }
+
+            /* Media query get stated Section */
+            @media (max-width: 786px) {
+                #getstarted h2 {
+                    font-size: 24px;
+                }
+
+                #getstarted p {
+                    font-size: 14px;
+                }
+
+                .step h5 {
+                    font-size: 16px;
+                }
+
+                .step p {
+                    font-size: 14px;
+                }
+
+                .step img {
+                    max-width: 100%;
+                    height: auto;
+                }
+            }
+
+            /* Media query FAQ Section */
+            @media (max-width: 768px) {
+                .container-acc {
+                    margin: 0;
+                }
+
+                .container-acc h2 {
+                    font-size: 1.4rem;
+                    margin-bottom: 15px;
+                }
+
+                .container-acc p {
+                    font-size: 1rem;
+                    padding: 0;
+                    text-align: justify;
+                }
+
+                .container-acc .accordion-button {
+                    font-size: 14px;
+                    padding: 10px;
+                }
+
+                .container-acc .accordion-body {
+                    font-size: 14px;
+                    padding: 15px;
+                }
+
+                .container-acc .accordion-button .arrow {
+                    font-size: 16px;
+                }
+
+                .container-acc .accordion {
+                    width: 100%;
+                }
+            }
+
+            /* Media query Contact Section */
+            @media (max-width: 786px) {
+                #contact h2 {
+                    font-size: 24px;
+                }
+
+                #contact p {
+                    font-size: 14px;
+                }
+
+                #contact ul {
+                    font-size: 14px;
+                    padding-left: 20px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <h3 class="text-center text-white">ERP Documentation</h3>
+            <a href="#overview">Overview</a>
+            <a href="#modules" class="d-flex justify-content-between align-items-center module-link" data-bs-toggle="collapse" data-bs-target="#modulesMenu" aria-expanded="false" aria-controls="modulesMenu">
+                Modules
+                <span class="toggle-icon">&#9660;</span>
+            </a>
+            <div id="modulesMenu" class="collapse submenu">
+                <a href="#module1" class="d-flex justify-content-between align-items-center module-link" data-bs-toggle="collapse" data-bs-target="#module1Menu" aria-expanded="false" aria-controls="module1Menu">
+                    User Management
+                    <span class="toggle-icon">&#9660;</span>
+                </a>
+                <div id="module1Menu" class="collapse nested-submenu">
+                    <a href="#module1-policy" class="nested-link">HR Policies</a>
+                    <a href="#module1-training" class="nested-link">Employee Training</a>
+                    <a href="#module1-payroll" class="d-flex justify-content-between align-items-center module-link" data-bs-toggle="collapse" data-bs-target="#module1PayrollMenu" aria-expanded="false" aria-controls="module1PayrollMenu">
+                        Payroll
+                        <span class="toggle-icon">&#9660;</span>
+                    </a>
+                    <div id="module1PayrollMenu" class="collapse nested-submenu">
+                        <a href="#payroll-setup" class="nested-link">Setup</a>
+                        <a href="#payroll-process" class="nested-link">Processing</a>
+                        <a href="#payroll-reporting" class="nested-link">Reporting</a>
+                    </div>
+                </div>
+                <a href="#module2">Acadamic Record Management</a>
+                <a href="#module3">Certificate and Event Maanagement</a>
+                <a href="#module4">Reporting and Analysis</a>
+                <a href="#module5">Venue Booking System</a>
+                <a href="#module6">Security Features</a>
+            </div>
+            <a href="#getstarted">Get Started</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+        <!-- Navbar-->
+        <section class="navbar-content mb-5">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">ERP Documentation</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#overview">Overview</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="modulesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Modules
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="modulesDropdown">
+                                    <li><a class="dropdown-item" href="#module1">User Management</a></li>
+                                    <li><a class="dropdown-item" href="#module2">Academic Record Management</a></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="dropdown-item dropdown-toggle" href="#">Certificate and Event Management</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#submodule1">Certificate Issuance</a></li>
+                                            <li><a class="dropdown-item" href="#submodule2">Event Planning</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#module4">Reporting and Analysis</a></li>
+                                    <li><a class="dropdown-item" href="#module5">Venue Booking System</a></li>
+                                    <li><a class="dropdown-item" href="#module6">Security Features</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#getstarted">Get Started</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#faq">FAQ</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </section>
+
+        <!-- Content -->
+        <div id="content">
+
+            <!-- Documentation Content -->
+            <section id="overview" class="py-3">
+                <h2 class="text-center mb-4">Overview</h2>
+                <p class="text-justify">This repository contains the source code for an ERP System for Institutions, designed to streamline and manage administrative, academic, and operational tasks. The system provides role-based access for administrators, faculty, students, and other stakeholders, ensuring a centralized and efficient solution to manage institutional processes.</p>
+            </section>
+
+            <!-- Modules Section -->
+            <section id="modules" class="py-3">
+                <h2 class="text-center mb-4">Modules</h2>
+
+                <!-- Feature Cards -->
+                <div class="feature-cards" id="module1">
+                    <!-- Feature 1 -->
+                    <div class="feature-card" >
+                        <i class="fas fa-users"></i>
+                        <h4>User Management</h4>
+                        <ul>
+                            <li><strong>Admin Role:</strong> Manage departments, students, and faculty.</li>
+                            <li><strong>Faculty Role:</strong> Post certificates, upload lectures, and track class records.</li>
+                            <li><strong>Student Role:</strong> Upload certificates, access placements, and sync LinkedIn achievements.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card" id="module2">
+                        <i class="fas fa-book"></i>
+                        <h4>Academic Record Management</h4>
+                        <ul>
+                            <li>Generate and manage question papers linked to course outcomes (COs).</li>
+                            <li>Track student marks for each CO and generate performance reports.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card" id="module3">
+                        <i class="fas fa-certificate"></i>
+                        <h4>Certificate and Event Management</h4>
+                        <ul>
+                            <li>Upload certificates for events like workshops, FDPs, and seminars.</li>
+                            <li>Sync achievements with LinkedIn.</li>
+                            <li>Recommend courses based on certificates.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card" id="module4">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Reporting and Analytics</h4>
+                        <ul>
+                            <li>Weekly performance reports emailed to admins.</li>
+                            <li>Downloadable reports for marks, events, and certifications.</li>
+                            <li>Visualized data insights for better decision-making.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="feature-card" id="module5">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>Venue Booking System</h4>
+                        <ul>
+                            <li>Manage bookings for auditoriums, seminar halls, and classrooms.</li>
+                            <li>Display 7-day availability charts with hourly time slots.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="feature-card" id="module6">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Security Features</h4>
+                        <ul>
+                            <li>Two-factor authentication for all users.</li>
+                            <li>Role-based access controls.</li>
+                            <li>Backup and recovery options.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Get Started Section -->
+            <section id="getstarted" class="py-3">
+                <div class="row justify-content-center">
+                    <!-- Step 1: Open the System -->
+                    <div class="col-12 mb-4">
+                        <h2 class="text-center">Getting Started with the ERP System</h2>
+                        <p class="text-center text-muted mb-4">Follow these simple steps to set up and start using the ERP system.</p>
+                        <div class="step mb-4">
+                            <h5 class="text-dark"><strong>Step 1:</strong> Open the System</h5>
+                            <p class="lead">Go to <code>http://localhost:3000</code> in your browser to access the ERP system.</p>
+                        </div>
+                    </div>
+            
+                    <!-- Step 2: Log In -->
+                    <div class="col-12 mb-4">
+                        <div class="step mb-4">
+                            <h5 class="text-dark"><strong>Step 2:</strong> Log In</h5>
+                            <p class="lead">Enter your admin credentials (username and password) to log in.</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Section -->
+                    <div class="col-12 text-center mb-4">
+                        <img src="ceo.webp" alt="ERP System Screenshot" class="img-fluid rounded shadow-lg" style="max-width: 90%; max-height: 400px;">
+                    </div>
+            
+                    <!-- Step 3: Navigate Dashboard -->
+                    <div class="col-12 mb-4">
+                        <div class="step mb-4">
+                            <h5 class="text-dark"><strong>Step 3:</strong> Navigate the Dashboard</h5>
+                            <p class="lead">Once logged in, you’ll be directed to the ERP dashboard where you can access various features.</p>
+                        </div>
+                    </div>
+            
+                    <!-- Step 4: Explore Features -->
+                    <div class="col-12 mb-4">
+                        <div class="step mb-4">
+                            <h5 class="text-dark"><strong>Step 4:</strong> Explore Features</h5>
+                            <p class="lead">Explore modules like User Management, Academic Records, and more.</p>
+                        </div>
+                    </div>
+            
+                    <!-- Step 5: Start Using the System -->
+                    <div class="col-12 mb-4">
+                        <div class="step mb-4">
+                            <h5 class="text-dark"><strong>Step 5:</strong> Start Using the System</h5>
+                            <p class="lead">Begin managing records, tracking student data, and utilizing all ERP features.</p>
+                        </div>
+                    </div>
+            
+                    <!-- Call to Action Button -->
+                    <div class="col-12 text-center">
+                        <a href="http://localhost:3000" class="btn btn-primary btn-lg px-5 py-3">Access ERP System Now</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="acc-container py-3" id="faq">
+                <div class="container-acc">
+                    <h2 class="text-center">Frequently Asked Questions (FAQ)</h2>
+                    <p class="mt-2">Here are some common questions and answers to help you get started with the ERP system.</p>
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    <span>What is the ERP system used for?</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </button>
+                            </h3>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-justify">
+                                    The ERP system is designed to help manage administrative tasks such as academic records, user management, certificate management, and much more.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <span>How do I reset my admin password?</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </button>
+                            </h3>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-justify">
+                                    You can reset your password by clicking the "Forgot Password" link on the login page. An email with reset instructions will be sent to your registered email address.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h3 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <span>Can I customize the dashboard?</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </button>
+                            </h3>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-justify">
+                                    Yes, the ERP system allows administrators to customize the dashboard layout and modules based on their preferences and the requirements of their institution.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact-us">
+            <div class="row">
+                    <!-- Left Section -->
+                    <div class="col-md-6 contact-left">
+                        <h2>Our Company</h2>
+                        <div class="contact-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p><strong>Location:</strong><br>Duo Dev Technologies, 3rd Floor, Incubation Centre, Erode Sengunthar Engineering College, Thudupathi, Perundurai, Tamil Nadu - 638057</p>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-phone-alt"></i>
+                            <p><strong>Contact:</strong><br><a href="tel:+918111090250" style="color: inherit; text-decoration: none;">+91 81110 90250</a></p>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-envelope"></i>
+                            <p><strong>Email:</strong><br><a href="mailto:contact@duodev.in" style="color: inherit; text-decoration: none;">contact@duodev.in</a></p>
+                        </div>
+                        <div class="map-container">
+                            <!-- Google Maps Embed -->
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d244.51865571050314!2d77.55054249724257!3d11.312879605003145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba913a4c7c7a15f%3A0x35d5bf5305fa9142!2sDuo%20Dev%20Technologies!5e0!3m2!1sen!2sin!4v1712482911806!5m2!1sen!2sin" 
+                                allowfullscreen="" 
+                                loading="lazy">
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <!-- Right Section -->
+                    <div class="col-md-6 contact-right">
+                        <h3>Get in Touch</h3>
+                        <form>
+                            <!-- Name -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                            </div>
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                            </div>
+                            <!-- Phone -->
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                            </div>
+                            <!-- Message -->
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" rows="4" placeholder="Write your message" required></textarea>
+                            </div>
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-submit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        
+        </div>
+
+  <!-- Footer Section -->
+  <section class="footer-section">
+    <div class="row">
+      <!-- Company Logo Section -->
+      <div class="col-md-4 footer-logo">
+        <img src="logo.png" alt="Company Logo" class="img-fluid">
+        <h5>
+          <span>D</span>uo <span>D</span>ev <br>
+          <span>T</span>echnologies
+        </h5>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-4 footer-links">
+        <h5 class="text-warning mb-4">Quick Links</h5>
         <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#contact">Contact</a></li>
+          <li><a href="#module1">User Management</a></li>
+          <li><a href="#module2">Academic Record Management</a></li>
+          <li><a href="#module3">Certificate and Event Management</a></li>
+          <li><a href="#module4">Reporting and Analysis</a></li>
+          <li><a href="#module5">Venue Booking System</a></li>
+          <li><a href="#module6">Security Features</a></li>
         </ul>
-    </nav>
-    <div class="container">
-        <aside class="sidebar">
-            <ul>
-                <li><a href="#introduction">Introduction</a></li>
-                <li><a href="#getting-started">Getting Started</a></li>
-                <li><a href="#modules">Modules</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#support">Support</a></li>
-            </ul>
-        </aside>
-        <main class="content">
-            <h2>Welcome to the Documentation</h2>
-            <p>
-                This is the main content area where all the documentation details will appear.
-                You can structure your content into various sections and provide users with a comprehensive guide.
-            </p>
-            <h3 id="introduction">Introduction</h3>
-            <p>Start with an overview of the system, its purpose, and features.</p>
-            <h3 id="getting-started">Getting Started</h3>
-            <p>Guide users on how to begin using the system, including setup instructions.</p>
-            <h3 id="modules">Modules</h3>
-            <p>Describe different modules of the system and their functionalities.</p>
-            <h3 id="faq">FAQ</h3>
-            <p>Address frequently asked questions to help users troubleshoot issues.</p>
-            <h3 id="support">Support</h3>
-            <p>Provide contact information and details for additional help and support.</p>
-        </main>
-    </div>
-    <footer>
-        <p>&copy; 2024 Duo Dev Technologies. All rights reserved.</p>
-    </footer>
-</body>
+      </div>
 
-</html>
+      <!-- Social Media -->
+      <div class="col-md-4 footer-social text-center text-md-start">
+        <h5 class="text-warning mb-4">Follow Us</h5>
+        <a href="#" class="fab fa-facebook"></a>
+        <a href="#" class="fab fa-twitter"></a>
+        <a href="#" class="fab fa-instagram"></a>
+        <a href="#" class="fab fa-linkedin"></a>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom text-center mt-4">
+      <p>2024 &copy; <a href="https://duodev.in" class="text-decoration-none" style="color: #fff;">Duo Dev Technologies.</a> All rights reserved.</p>
+    </div>
+</section>
+
+<style>
+    section.footer-section {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 20px 0;
+      margin-bottom: 0;
+    }
+
+    section.footer-section a:hover {
+      text-decoration: underline;
+      color: #f39c12 !important;
+    }
+
+    section.footer-section i {
+      transition: transform 0.3s;
+    }
+
+    section.footer-section i:hover {
+      transform: scale(1.2);
+    }
+
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .footer-logo img {
+      max-width: 120px;
+      margin-bottom: 10px;
+    }
+
+    .footer-logo h5 {
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .footer-logo span {
+      color: #3498db;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+    }
+
+    .footer-links ul li a:hover {
+      color: #f39c12;
+    }
+
+    .footer-social a {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: #ecf0f1;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-social a:hover {
+      color: #f39c12;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #7f8c8d;
+      padding-top: 20px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .footer-links{
+            text-align: center;
+        }
+    }
+  </style>
+    
+        <!-- JavaScript for Sidebar Navigation -->
+        <script>
+            // Handle navigation and submenu expansion
+            document.querySelectorAll('.module-link, .nested-link').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+
+                    // Expand submenu if collapsed
+                    const submenu = this.nextElementSibling;
+                    if (submenu && submenu.classList.contains('collapse')) {
+                        submenu.classList.add('show');
+                    }
+
+                    // Scroll to the target section
+                    if (target) {
+                        e.preventDefault(); // Prevent default anchor behavior
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu');
+
+                dropdownSubmenus.forEach(function (submenu) {
+                    const toggleLink = submenu.querySelector('.dropdown-toggle');
+                    
+                    // Prevent Bootstrap from closing the menu when clicking inside
+                    submenu.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent click propagation
+                    });
+
+                    // Toggle the visibility of the submenu on click
+                    toggleLink.addEventListener('click', function (e) {
+                        e.preventDefault(); // Prevent navigation
+                        submenu.classList.toggle('show'); // Toggle 'show' class
+                    });
+                });
+            });
+
+        </script>
+
+        <!-- Bootstrap JS, Popper.js, and jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- Bootstrap JS (optional, for accordion functionality) -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    </body>
+
+    </html>
